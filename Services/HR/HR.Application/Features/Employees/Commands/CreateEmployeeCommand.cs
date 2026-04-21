@@ -58,9 +58,9 @@ public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeComman
 
             return Result.Success(response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<CreateEmployeeResponse>(ex.Message);
+            return Result.Failure<CreateEmployeeResponse>("Unexpected error occurred while creating employee.");
         }
     }
 }

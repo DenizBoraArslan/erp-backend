@@ -38,9 +38,9 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, R
 
             return Result.Success(response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<GetProductByIdResponse>(ex.Message);
+            return Result.Failure<GetProductByIdResponse>("Unexpected error occurred while getting product.");
         }
     }
 }

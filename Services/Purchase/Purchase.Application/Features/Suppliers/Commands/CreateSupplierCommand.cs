@@ -13,6 +13,7 @@ public class CreateSupplierCommand : IRequest<Result<CreateSupplierResponse>>
     public string Address { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;
+    public string TaxId { get; set; } = string.Empty;
     public int Type { get; set; }
 }
 
@@ -40,7 +41,7 @@ public class CreateSupplierCommandHandler : IRequestHandler<CreateSupplierComman
                 City = request.City,
                 Country = request.Country,
                 Type = (SupplierType)request.Type,
-                TaxId = string.Empty,
+                TaxId = request.TaxId,
                 IsActive = true
             };
 
@@ -55,9 +56,9 @@ public class CreateSupplierCommandHandler : IRequestHandler<CreateSupplierComman
 
             return Result.Success(response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<CreateSupplierResponse>(ex.Message);
+            return Result.Failure<CreateSupplierResponse>("Unexpected error occurred while creating supplier.");
         }
     }
 }

@@ -57,9 +57,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
             return Result.Success(response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<CreateProductResponse>(ex.Message);
+            return Result.Failure<CreateProductResponse>("Unexpected error occurred while creating product.");
         }
     }
 }

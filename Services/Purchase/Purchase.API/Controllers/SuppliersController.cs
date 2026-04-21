@@ -25,6 +25,6 @@ public class SuppliersController : ControllerBase
         if (!result.IsSuccess)
             return BadRequest(result);
 
-        return CreatedAtAction(nameof(CreateSupplier), result);
+        return Created($"/api/suppliers/{result.Data?.Id}", result);
     }
 }

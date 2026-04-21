@@ -55,9 +55,9 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
 
             return Result.Success(response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<CreateCustomerResponse>(ex.Message);
+            return Result.Failure<CreateCustomerResponse>("Unexpected error occurred while creating customer.");
         }
     }
 }
