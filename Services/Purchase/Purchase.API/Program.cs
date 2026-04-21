@@ -1,6 +1,8 @@
 using Purchase.Application;
 using Purchase.Infrastructure;
+using Purchase.Infrastructure.Persistence;
 using Common.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,12 @@ builder.Services.AddApplicationLayer(typeof(Purchase.Application.AssemblyReferen
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<PurchaseDbContext>();
+    dbContext.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {

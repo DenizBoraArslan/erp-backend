@@ -1,6 +1,8 @@
 using HR.Application;
 using HR.Infrastructure;
+using HR.Infrastructure.Persistence;
 using Common.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,12 @@ builder.Services.AddApplicationLayer(typeof(HR.Application.AssemblyReference).As
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<HRDbContext>();
+    dbContext.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
