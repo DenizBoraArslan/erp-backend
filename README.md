@@ -44,7 +44,7 @@ dotnet ef database update \
 
 ## Şimdilik Test Ederken İzlenecek Adımlar
 
-> Not: Çözümde şu an ayrı bir otomatik test projesi bulunmadığı için aşağıdaki adımlar smoke test / manuel doğrulama içindir.
+> Not: Çözüm içinde şu an ayrı bir otomatik test projesi bulunmadığından aşağıdaki adımlar smoke test / manuel doğrulama içindir.
 
 1. **Projeyi derle**
    ```bash
@@ -63,9 +63,9 @@ dotnet ef database update \
    Aynı komut, ilgili servis yoluna göre diğer API’ler için de uygulanır (`Sales.API`, `Stock.API`, `HR.API`, `Purchase.API`, `User.API`).
 
 4. **Servis açıldıktan sonra temel kontrol yap**
-   - API açılış loglarında hata olmadığını doğrula.
+   - API açılış loglarında servis dinlemeye başladığını gösteren mesajı (örn. `Now listening on ...`) ve hata olmamasını doğrula.
    - Swagger/OpenAPI ekranının açıldığını doğrula.
-   - En az bir endpoint’e istek atıp başarılı yanıt alındığını kontrol et.
+   - En az bir endpoint’e istek atıp `2xx` yanıt alındığını kontrol et.
 
 5. **Veritabanı kontrolü**
    - İlk açılışta migration’ların otomatik uygulandığını loglardan doğrula.
