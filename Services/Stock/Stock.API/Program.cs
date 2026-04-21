@@ -1,6 +1,8 @@
 using Stock.Application;
 using Stock.Infrastructure;
+using Stock.Infrastructure.Persistence;
 using Common.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,12 @@ builder.Services.AddApplicationLayer(typeof(Stock.Application.AssemblyReference)
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<StockDbContext>();
+    dbContext.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
