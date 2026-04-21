@@ -1,5 +1,7 @@
 using MediatR;
 using Common.Results;
+using Common.Interfaces;
+using Stock.Domain.Entities;
 
 namespace Stock.Application.Features.Products.Commands;
 
@@ -17,11 +19,48 @@ public class CreateProductCommand : IRequest<Result<CreateProductResponse>>
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<CreateProductResponse>>
 {
+    private readonly IRepository<Product> _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public CreateProductCommandHandler(IRepository<Product> productRepository, IUnitOfWork unitOfWork)
+    {
+        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
+    }
+
     public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        // TODO: Implement repository pattern
-        await Task.CompletedTask;
-        return Result.Failure<CreateProductResponse>("Not implemented yet");
+        try
+        {
+            var product = new Product
+            {
+                Sku = request.Sku,
+                Name = request.Name,
+                Description = request.Description,
+                Quantity = request.Quantity,
+                ReorderLevel = request.ReorderLevel,
+                UnitPrice = request.UnitPrice,
+                Unit = request.Unit,
+                CategoryId = request.CategoryId,
+                IsActive = true
+            };
+
+            await _productRepository.AddAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new CreateProductResponse
+            {
+                Id = product.Id,
+                Sku = product.Sku,
+                Name = product.Name
+            };
+
+            return Result.Success(response);
+        }
+        catch (Exception)
+        {
+            return Result.Failure<CreateProductResponse>("Unexpected error occurred while creating product.");
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 using MediatR;
 using Common.Results;
+using Common.Interfaces;
 using Stock.Domain.Entities;
 
 namespace Stock.Application.Features.Products.Queries;
@@ -11,11 +12,36 @@ public class GetProductByIdQuery : IRequest<Result<GetProductByIdResponse>>
 
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<GetProductByIdResponse>>
 {
+    private readonly IRepository<Product> _productRepository;
+
+    public GetProductByIdQueryHandler(IRepository<Product> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
     public async Task<Result<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        // TODO: Implement repository pattern
-        await Task.CompletedTask;
-        return Result.Failure<GetProductByIdResponse>("Not implemented yet");
+        try
+        {
+            var product = await _productRepository.GetByIdAsync(request.ProductId, cancellationToken);
+            if (product is null)
+                return Result.Failure<GetProductByIdResponse>("Product not found");
+
+            var response = new GetProductByIdResponse
+            {
+                Id = product.Id,
+                Sku = product.Sku,
+                Name = product.Name,
+                Quantity = product.Quantity,
+                UnitPrice = product.UnitPrice
+            };
+
+            return Result.Success(response);
+        }
+        catch (Exception)
+        {
+            return Result.Failure<GetProductByIdResponse>("Unexpected error occurred while getting product.");
+        }
     }
 }
 
