@@ -2,6 +2,29 @@
 
 Bu repository’de her servis kendi veritabanı ve migration yapısına sahiptir.
 
+## Kimlik Doğrulama ve Yetkilendirme
+
+- JWT tabanlı authentication tüm API servislerinde etkinleştirildi.
+- `User.API` içinde aşağıdaki endpointler eklendi:
+  - `POST /api/auth/register`
+  - `POST /api/auth/login`
+  - `POST /api/auth/refresh-token`
+- Role-based authorization aktif:
+  - Yazma işlemleri için `Admin` / `Manager`
+  - `Stock` ürün okuma için `Admin` / `Manager` / `User` / `Viewer`
+
+## Servis İletişimi Temeli
+
+- Senkron iletişim altyapısı için `HttpClient` merkezi olarak kayıt edilir (`AddOperationalFoundation`).
+- Asenkron iletişim temeli için in-memory integration event publisher/processor eklendi.
+- User kayıt akışında `UserRegisteredIntegrationEvent` yayınlanır.
+
+## Operasyonel Temel
+
+- Her API’de `/health` endpointi tanımlandı.
+- `X-Correlation-Id` destekli request correlation middleware eklendi.
+- Integration event processing merkezi logger ile loglanır.
+
 ## Gereksinimler
 
 - .NET SDK 10.0+

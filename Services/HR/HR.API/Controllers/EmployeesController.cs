@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using HR.Application.Features.Employees.Commands;
 
@@ -6,6 +7,7 @@ namespace HR.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin,Manager")]
 public class EmployeesController : ControllerBase
 {
     private readonly IMediator _mediator;

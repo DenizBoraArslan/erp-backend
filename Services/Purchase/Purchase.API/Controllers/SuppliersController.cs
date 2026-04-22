@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using Purchase.Application.Features.Suppliers.Commands;
 
@@ -6,6 +7,7 @@ namespace Purchase.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin,Manager")]
 public class SuppliersController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -11,6 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddApplicationLayer(typeof(Purchase.Application.AssemblyReference).Assembly);
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddOperationalFoundation();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 var app = builder.Build();
@@ -22,6 +24,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseGlobalExceptionHandler();
+app.UseRequestCorrelation();
 
 if (app.Environment.IsDevelopment())
 {
@@ -31,9 +34,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
-
 

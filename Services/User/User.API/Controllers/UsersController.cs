@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using User.Application.Features.Users.Commands;
 
@@ -6,6 +7,7 @@ namespace User.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin,Manager")]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
