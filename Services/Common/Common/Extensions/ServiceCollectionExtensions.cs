@@ -41,6 +41,9 @@ public static class ServiceCollectionExtensions
     {
         var jwtSection = configuration.GetSection("Jwt");
         var key = jwtSection["Key"] ?? throw new InvalidOperationException("Jwt:Key configuration is required.");
+        if (key.Length < 32)
+            throw new InvalidOperationException("Jwt:Key must be at least 32 characters long.");
+
         var issuer = jwtSection["Issuer"] ?? "erp-backend";
         var audience = jwtSection["Audience"] ?? "erp-backend-clients";
 

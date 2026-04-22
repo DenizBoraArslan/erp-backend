@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddOptions<JwtOptions>()
             .Bind(configuration.GetSection(JwtOptions.SectionName))
             .Validate(opt => !string.IsNullOrWhiteSpace(opt.Key), "Jwt:Key configuration is required.")
+            .Validate(opt => opt.Key.Length >= 32, "Jwt:Key must be at least 32 characters long.")
             .ValidateOnStart();
 
         return services;
