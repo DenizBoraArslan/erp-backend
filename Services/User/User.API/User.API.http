@@ -1,6 +1,38 @@
 @User.API_HostAddress = http://localhost:5033
 
-GET {{User.API_HostAddress}}/weatherforecast/
+POST {{User.API_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Demo",
+  "lastName": "User",
+  "email": "demo.user@example.com",
+  "password": "StrongPass123!",
+  "phoneNumber": "5551112233"
+}
+
+###
+
+POST {{User.API_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo.user@example.com",
+  "password": "StrongPass123!"
+}
+
+###
+
+POST {{User.API_HostAddress}}/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+}
+
+###
+
+GET {{User.API_HostAddress}}/health
 Accept: application/json
 
 ###

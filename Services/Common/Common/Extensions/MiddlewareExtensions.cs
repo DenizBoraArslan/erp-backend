@@ -9,4 +9,9 @@ public static class MiddlewareExtensions
     {
         return app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
     }
+
+    public static IApplicationBuilder UseRequestCorrelation(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<RequestCorrelationMiddleware>();
+    }
 }

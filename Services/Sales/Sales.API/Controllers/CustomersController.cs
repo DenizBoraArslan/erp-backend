@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MediatR;
 using Sales.Application.Features.Customers.Commands;
 
@@ -6,6 +7,7 @@ namespace Sales.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin,Manager")]
 public class CustomersController : ControllerBase
 {
     private readonly IMediator _mediator;

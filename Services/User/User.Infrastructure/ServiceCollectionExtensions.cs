@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Common.Interfaces;
+using User.Application.Abstractions;
+using User.Infrastructure.Security;
 
 public static class ServiceCollectionExtensions
 {
@@ -22,6 +24,14 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITokenService, JwtTokenService>();
+
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration.GetSection(JwtOptions.SectionName))
+            .Validate(opt => !string.IsNullOrWhiteSpace(opt.Key), "Jwt:Key configuration is required.")
+            .Validate(opt => opt.Key.Length >= 32, "Jwt:Key must be at least 32 characters long.")
+            .ValidateOnStart();
 
         return services;
     }

@@ -27,6 +27,12 @@ public class User : BaseEntity
     public string PhoneNumber { get; set; } = string.Empty;
     public UserRole Role { get; set; }
     public bool IsActive { get; set; } = true;
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
+
+    public void AddRefreshToken(RefreshToken refreshToken)
+    {
+        RefreshTokens.Add(refreshToken);
+    }
 }
 
 public enum UserRole
