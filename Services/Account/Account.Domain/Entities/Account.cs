@@ -2,29 +2,23 @@ using Common.Models;
 
 namespace Account.Domain.Entities;
 
-public class ChartOfAccount : AggregateRoot
+public class ChartOfAccount : BaseEntity
 {
-    public int Id { get; set; }
     public string AccountCode { get; set; } = string.Empty;
     public string AccountName { get; set; } = string.Empty;
     public AccountType Type { get; set; }
     public decimal Balance { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
-public class JournalEntry : AggregateRoot
+public class JournalEntry : BaseEntity
 {
-    public int Id { get; set; }
     public string EntryNumber { get; set; } = string.Empty;
     public DateTime EntryDate { get; set; }
     public string Description { get; set; } = string.Empty;
     public decimal TotalDebit { get; set; }
     public decimal TotalCredit { get; set; }
     public EntryStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
 public class JournalLine : BaseEntity

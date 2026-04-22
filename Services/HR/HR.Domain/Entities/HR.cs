@@ -2,9 +2,8 @@ using Common.Models;
 
 namespace HR.Domain.Entities;
 
-public class Employee : AggregateRoot
+public class Employee : BaseEntity
 {
-    public int Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
@@ -17,24 +16,18 @@ public class Employee : AggregateRoot
     public decimal Salary { get; set; }
     public int DepartmentId { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
-public class Department : AggregateRoot
+public class Department : BaseEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public int? ManagerId { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
-public class Attendance : AggregateRoot
+public class Attendance : BaseEntity
 {
-    public int Id { get; set; }
     public int EmployeeId { get; set; }
     public DateTime CheckInTime { get; set; }
     public DateTime? CheckOutTime { get; set; }
@@ -42,17 +35,14 @@ public class Attendance : AggregateRoot
     public string Notes { get; set; } = string.Empty;
 }
 
-public class Leave : AggregateRoot
+public class Leave : BaseEntity
 {
-    public int Id { get; set; }
     public int EmployeeId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public LeaveType Type { get; set; }
     public LeaveStatus Status { get; set; }
     public string Reason { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
 public enum EmploymentType

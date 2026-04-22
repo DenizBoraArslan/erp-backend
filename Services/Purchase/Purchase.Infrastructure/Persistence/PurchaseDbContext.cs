@@ -29,7 +29,9 @@ public class PurchaseDbContext : DbContext
             entity.Property(e => e.City).HasMaxLength(100);
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.TaxId).HasMaxLength(50);
+            entity.Property(e => e.IsActive);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
         });
 
         // PurchaseOrder Configuration
@@ -38,9 +40,13 @@ public class PurchaseDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.OrderNumber).IsRequired().HasMaxLength(50);
             entity.HasIndex(e => e.OrderNumber).IsUnique();
+            entity.Property(e => e.OrderDate);
+            entity.Property(e => e.DeliveryDate);
             entity.Property(e => e.TotalAmount).HasPrecision(18, 2);
+            entity.Property(e => e.Status);
             entity.Property(e => e.Notes).HasMaxLength(500);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
 
             entity.HasOne<Supplier>()
                 .WithMany()
@@ -54,6 +60,8 @@ public class PurchaseDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.UnitPrice).HasPrecision(18, 2);
             entity.Property(e => e.LineTotal).HasPrecision(18, 2);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
 
             entity.HasOne<PurchaseOrder>()
                 .WithMany()

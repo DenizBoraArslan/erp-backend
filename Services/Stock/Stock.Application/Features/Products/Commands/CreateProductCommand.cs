@@ -2,6 +2,7 @@ using MediatR;
 using Common.Results;
 using Common.Interfaces;
 using Stock.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Stock.Application.Features.Products.Commands;
 
@@ -21,11 +22,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 {
     private readonly IRepository<Product> _productRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<CreateProductCommandHandler> _logger;
 
-    public CreateProductCommandHandler(IRepository<Product> productRepository, IUnitOfWork unitOfWork)
+    public CreateProductCommandHandler(IRepository<Product> productRepository, IUnitOfWork unitOfWork, ILogger<CreateProductCommandHandler> logger)
     {
         _productRepository = productRepository;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -57,9 +60,11 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
             return Result.Success(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return Result.Failure<CreateProductResponse>("Unexpected error occurred while creating product.");
+            _logger.LogError(ex, "Error creating product");
+            var message = ex.InnerException?.Message ?? ex.Message;
+            throw;
         }
     }
 }

@@ -25,7 +25,9 @@ public class AccountDbContext : DbContext
             entity.Property(e => e.AccountCode).IsRequired().HasMaxLength(50);
             entity.Property(e => e.AccountName).IsRequired().HasMaxLength(255);
             entity.Property(e => e.Balance).HasPrecision(18, 2);
+            entity.Property(e => e.IsActive);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
         });
 
         // JournalEntry Configuration
@@ -33,10 +35,13 @@ public class AccountDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.EntryNumber).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.EntryDate);
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.TotalDebit).HasPrecision(18, 2);
             entity.Property(e => e.TotalCredit).HasPrecision(18, 2);
+            entity.Property(e => e.Status);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
         });
 
         // JournalLine Configuration
@@ -46,6 +51,8 @@ public class AccountDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Debit).HasPrecision(18, 2);
             entity.Property(e => e.Credit).HasPrecision(18, 2);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
 
             entity.HasOne<JournalEntry>()
                 .WithMany()

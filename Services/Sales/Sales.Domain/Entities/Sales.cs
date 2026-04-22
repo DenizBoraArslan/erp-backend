@@ -2,9 +2,8 @@ using Common.Models;
 
 namespace Sales.Domain.Entities;
 
-public class Customer : AggregateRoot
+public class Customer : BaseEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
@@ -14,13 +13,10 @@ public class Customer : AggregateRoot
     public decimal CreditLimit { get; set; }
     public CustomerType Type { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
-public class SalesOrder : AggregateRoot
+public class SalesOrder : BaseEntity
 {
-    public int Id { get; set; }
     public string OrderNumber { get; set; } = string.Empty;
     public int CustomerId { get; set; }
     public DateTime OrderDate { get; set; }
@@ -28,8 +24,6 @@ public class SalesOrder : AggregateRoot
     public decimal TotalAmount { get; set; }
     public OrderStatus Status { get; set; }
     public string Notes { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
 public class OrderLine : BaseEntity

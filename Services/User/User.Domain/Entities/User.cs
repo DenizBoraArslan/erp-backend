@@ -1,10 +1,25 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Common.Models;
 
 namespace User.Domain.Entities;
 
-public class User : AggregateRoot
+public class User : BaseEntity
 {
-    public int Id { get; set; }
+    private readonly List<DomainEvent> _domainEvents = [];
+
+    [NotMapped]
+    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+    protected void AddDomainEvent(DomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
+
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
@@ -12,8 +27,6 @@ public class User : AggregateRoot
     public string PhoneNumber { get; set; } = string.Empty;
     public UserRole Role { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
 public enum UserRole

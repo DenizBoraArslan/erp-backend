@@ -3,6 +3,7 @@ global using UserDomainEntity = User.Domain.Entities.User;
 using MediatR;
 using Common.Results;
 using Common.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace User.Application.Features.Users.Commands;
 
@@ -20,11 +21,13 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 {
     private readonly IRepository<UserDomainEntity> _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<CreateUserCommandHandler> _logger;
 
-    public CreateUserCommandHandler(IRepository<UserDomainEntity> userRepository, IUnitOfWork unitOfWork)
+    public CreateUserCommandHandler(IRepository<UserDomainEntity> userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<Result<CreateUserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -57,7 +60,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         }
         catch (Exception ex)
         {
-            return Result.Failure<CreateUserResponse>(ex.Message);
+            _logger.LogError(ex, "Error creating user");
+            throw;
         }
     }
 }

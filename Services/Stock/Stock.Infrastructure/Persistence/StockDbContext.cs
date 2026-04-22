@@ -26,7 +26,9 @@ public class StockDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.UnitPrice).HasPrecision(18, 2);
             entity.Property(e => e.Unit).HasMaxLength(50);
+            entity.Property(e => e.IsActive);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
         });
 
         // StockMovement Configuration
@@ -36,6 +38,7 @@ public class StockDbContext : DbContext
             entity.Property(e => e.Reference).HasMaxLength(100);
             entity.Property(e => e.Notes).HasMaxLength(500);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+            entity.Property(e => e.UpdatedAt);
 
             entity.HasOne<Product>()
                 .WithMany()

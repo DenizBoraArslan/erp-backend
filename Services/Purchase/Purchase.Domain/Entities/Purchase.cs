@@ -2,9 +2,8 @@ using Common.Models;
 
 namespace Purchase.Domain.Entities;
 
-public class Supplier : AggregateRoot
+public class Supplier : BaseEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
@@ -14,13 +13,10 @@ public class Supplier : AggregateRoot
     public string TaxId { get; set; } = string.Empty;
     public SupplierType Type { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
-public class PurchaseOrder : AggregateRoot
+public class PurchaseOrder : BaseEntity
 {
-    public int Id { get; set; }
     public string OrderNumber { get; set; } = string.Empty;
     public int SupplierId { get; set; }
     public DateTime OrderDate { get; set; }
@@ -28,8 +24,6 @@ public class PurchaseOrder : AggregateRoot
     public decimal TotalAmount { get; set; }
     public PurchaseOrderStatus Status { get; set; }
     public string Notes { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
 }
 
 public class PurchaseOrderLine : BaseEntity
