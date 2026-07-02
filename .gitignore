@@ -1,0 +1,49 @@
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# MSBuild
+*.log
+*.binlog
+
+# Environment & secrets
+appsettings.Development.json
+*.env
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Entity Framework migrations (opsiyonel, migration'larý tutmak istersen bu satýrý sil)
+# */Migrations/
+
+# Docker
+docker-compose.override.yml
