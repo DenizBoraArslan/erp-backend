@@ -15,6 +15,8 @@ namespace Finance.Domain.Entites
         public string CustomerName { get; private set; } = string.Empty;
         public Guid? OrderId { get; private set; }
         public InvoiceStatus Status { get; private set; }
+        public decimal SubTotal { get; private set; }
+        public decimal TaxTotal { get; private set; }
         public decimal TotalAmount { get; private set; }
         public decimal PaidAmount { get; private set; }
         public decimal RemainingAmount => TotalAmount - PaidAmount;
@@ -47,10 +49,24 @@ namespace Finance.Domain.Entites
             };
         }
 
-        public void AddItem(string description, int quantity, decimal unitPrice)
+        public void AddItem(string description, int quantity, decimal unitPrice, decimal taxRate = 0)
         {
-            var item = InvoiceItem.Create(Id, description, quantity, unitPrice);
+            var item = InvoiceItem.Create(Id, description, quantity, unitPrice, taxRate);
             _items.Add(item);
+            RecalculateTotal();
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void UpdateDetails(DateTime? dueDate, IEnumerable<(string Description, int Quantity, decimal UnitPrice, decimal TaxRate)> items)
+        {
+            if (Status != InvoiceStatus.Draft)
+                throw new InvalidOperationException("Only draft invoices can be updated.");
+
+            _items.Clear();
+            foreach (var item in items)
+                _items.Add(InvoiceItem.Create(Id, item.Description, item.Quantity, item.UnitPrice, item.TaxRate));
+
+            DueDate = dueDate;
             RecalculateTotal();
             UpdatedAt = DateTime.UtcNow;
         }
@@ -92,7 +108,9 @@ namespace Finance.Domain.Entites
 
         private void RecalculateTotal()
         {
-            TotalAmount = _items.Sum(i => i.TotalPrice);
+            SubTotal = _items.Sum(i => i.TotalPrice);
+            TaxTotal = _items.Sum(i => i.TaxAmount);
+            TotalAmount = SubTotal + TaxTotal;
         }
     }
 }

@@ -2,7 +2,11 @@ using Finance.API;
 using Finance.Application.Consumers;
 using HR.API;
 using Identity.API;
+using Identity.Domain.Entities;
+using Identity.Domain.Enums;
+using Identity.Domain.Interfaces;
 using Inventory.API;
+using Inventory.Application.Consumers;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +45,8 @@ builder.Services.AddControllers()
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<OrderCreatedConsumer>();
+    x.AddConsumer<OrderConfirmedConsumer>();
+    x.AddConsumer<PurchaseInvoiceConfirmedConsumer>();
 
     x.UsingRabbitMq((ctx, cfg) =>
     {
@@ -82,6 +88,24 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Seed a single Admin account on first run. Public self-registration has
+// been removed, so this is the only way in until the Admin creates more
+// users from the "Kullanıcı Yönetimi" screen.
+using (var scope = app.Services.CreateScope())
+{
+    var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+    const string adminEmail = "admin@dbsoft.com";
+
+    var existingAdmin = await userRepository.GetByEmailAsync(adminEmail);
+    if (existingAdmin is null)
+    {
+        const string adminPassword = "DbSoft!Admin2026";
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword);
+        var admin = User.Create("Sistem", "Yöneticisi", adminEmail, passwordHash, UserRole.Admin);
+        await userRepository.AddAsync(admin);
+    }
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

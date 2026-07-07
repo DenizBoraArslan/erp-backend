@@ -11,7 +11,8 @@ namespace Finance.Application.Features.Invoices.CreateInvoice
     public record InvoiceItemRequest(
      string Description,
      int Quantity,
-     decimal UnitPrice
+     decimal UnitPrice,
+     decimal TaxRate = 0
  );
 
     public record CreateInvoiceCommand(

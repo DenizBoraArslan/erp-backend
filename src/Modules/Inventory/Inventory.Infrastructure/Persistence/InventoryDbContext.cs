@@ -33,6 +33,7 @@ namespace Inventory.Infrastructure.Persistence
                 entity.Property(p => p.SKU).IsRequired().HasMaxLength(50);
                 entity.HasIndex(p => p.SKU).IsUnique();
                 entity.Property(p => p.Price).HasPrecision(18, 2);
+                entity.Property(p => p.CostPrice).HasPrecision(18, 2);
                 entity.Property(p => p.Description).HasMaxLength(1000);
                 entity.HasOne(p => p.Category)
                       .WithMany()

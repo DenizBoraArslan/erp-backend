@@ -4,6 +4,7 @@ using Identity.Application.Common;
 using Identity.Application.DTOs;
 using Identity.Application.Interfaces;
 using Identity.Domain.Entities;
+using Identity.Domain.Enums;
 using Identity.Domain.Interfaces;
 using MediatR;
 
@@ -24,9 +25,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
         if (exists)
             return Result<AuthResponse>.Failure("This email address is already in use.");
 
+        if (!Enum.TryParse<UserRole>(request.Role, ignoreCase: true, out var role))
+            return Result<AuthResponse>.Failure($"Geçersiz rol: {request.Role}");
+
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-        var user = User.Create(request.FirstName, request.LastName, request.Email, passwordHash);
+        var user = User.Create(request.FirstName, request.LastName, request.Email, passwordHash, role);
 
         await _userRepository.AddAsync(user, ct);
 

@@ -27,7 +27,7 @@ namespace Finance.Application.Features.Invoices.CreateInvoice
             var invoice = Invoice.Create(request.CustomerId, request.CustomerName, request.DueDate, request.OrderId);
 
             foreach (var item in request.Items)
-                invoice.AddItem(item.Description, item.Quantity, item.UnitPrice);
+                invoice.AddItem(item.Description, item.Quantity, item.UnitPrice, item.TaxRate);
 
             await _invoiceRepository.AddAsync(invoice, ct);
 

@@ -23,6 +23,10 @@ namespace Finance.Infrastructure
 
             services.AddScoped<IPaymentRepository, PaymentRepository>();
 
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
+            services.AddScoped<IPurchasePaymentRepository, PurchasePaymentRepository>();
+
             return services;
         }
     }

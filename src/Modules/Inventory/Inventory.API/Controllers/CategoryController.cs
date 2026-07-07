@@ -3,6 +3,7 @@ using Inventory.Application.Features.Categories.CreateCategory;
 using Inventory.Application.Features.Categories.DeactivateCategory;
 using Inventory.Application.Features.Categories.GetCategories;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Inventory.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
@@ -33,6 +35,7 @@ namespace Inventory.API.Controllers
             return Ok(result.Data);
         }
 
+        [Authorize(Roles = "Admin,InventoryManager")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command, CancellationToken ct)
         {
@@ -41,6 +44,7 @@ namespace Inventory.API.Controllers
                 return BadRequest(new { error = result.Error });
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
+        [Authorize(Roles = "Admin,InventoryManager")]
         [HttpPatch("{id}/deactivate")]
         public async Task<IActionResult> Deactivate(Guid id, CancellationToken ct)
         {
@@ -49,6 +53,7 @@ namespace Inventory.API.Controllers
                 return BadRequest(new { error = result.Error });
             return Ok();
         }
+        [Authorize(Roles = "Admin,InventoryManager")]
         [HttpPatch("{id}/activate")]
         public async Task<IActionResult> Activate(Guid id, CancellationToken ct)
         {

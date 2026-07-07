@@ -46,6 +46,20 @@ namespace Sales.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void UpdateDetails(string? note, IEnumerable<(Guid ProductId, string ProductName, int Quantity, decimal UnitPrice)> items)
+        {
+            if (Status != OrderStatus.Pending)
+                throw new InvalidOperationException("Only pending orders can be updated.");
+
+            _orderItems.Clear();
+            foreach (var item in items)
+                _orderItems.Add(OrderItem.Create(Id, item.ProductId, item.ProductName, item.Quantity, item.UnitPrice));
+
+            Note = note;
+            RecalculateTotal();
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void Confirm()
         {
             if (Status != OrderStatus.Pending)

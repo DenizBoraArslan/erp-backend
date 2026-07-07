@@ -38,6 +38,18 @@ namespace Identity.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void UpdateRole(UserRole role)
+        {
+            Role = role;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SetPasswordHash(string passwordHash)
+        {
+            PasswordHash = passwordHash;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void Deactivate() => IsActive = false;
         public void Activate() => IsActive = true;
     }

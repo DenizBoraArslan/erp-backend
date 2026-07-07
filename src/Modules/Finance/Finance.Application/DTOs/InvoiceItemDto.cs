@@ -11,6 +11,9 @@ namespace Finance.Application.DTOs
     string Description,
     int Quantity,
     decimal UnitPrice,
-    decimal TotalPrice
+    decimal TotalPrice,
+    decimal TaxRate,
+    decimal TaxAmount,
+    decimal GrandTotal
 );
 }

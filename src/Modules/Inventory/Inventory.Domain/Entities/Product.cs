@@ -13,6 +13,10 @@ namespace Inventory.Domain.Entities
         public string? Description { get; private set; }
         public string SKU { get; private set; } = string.Empty;
         public decimal Price { get; private set; }
+        // Maliyet/alım fiyatı — used for margin reporting (Kâr/Zarar), separate
+        // from Price (the selling price). Optional: defaults to 0 for products
+        // where cost tracking doesn't matter.
+        public decimal CostPrice { get; private set; }
         public int StockQuantity { get; private set; }
         public int MinStockLevel { get; private set; }
         public Guid CategoryId { get; private set; }
@@ -23,7 +27,7 @@ namespace Inventory.Domain.Entities
 
         private Product() { }
 
-        public static Product Create(string name, decimal price, Guid categoryId, string? description = null, int minStockLevel = 0)
+        public static Product Create(string name, decimal price, Guid categoryId, string? description = null, int minStockLevel = 0, decimal costPrice = 0)
         {
             return new Product
             {
@@ -31,6 +35,7 @@ namespace Inventory.Domain.Entities
                 Name = name,
                 SKU = $"PRD-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..6].ToUpper()}",
                 Price = price,
+                CostPrice = costPrice,
                 CategoryId = categoryId,
                 Description = description,
                 StockQuantity = 0,
@@ -40,12 +45,13 @@ namespace Inventory.Domain.Entities
             };
         }
 
-        public void Update(string name, string? description, decimal price, int minStockLevel)
+        public void Update(string name, string? description, decimal price, int minStockLevel, decimal costPrice)
         {
             Name = name;
             Description = description;
             Price = price;
             MinStockLevel = minStockLevel;
+            CostPrice = costPrice;
             UpdatedAt = DateTime.UtcNow;
         }
 

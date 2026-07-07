@@ -8,5 +8,6 @@ public record RegisterCommand(
     string FirstName,
     string LastName,
     string Email,
-    string Password
+    string Password,
+    string Role = "User"
 ) : IRequest<Result<AuthResponse>>;

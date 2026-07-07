@@ -2,6 +2,7 @@
 using HR.Application.Features.LeaveRequests.GetLeaveRequests;
 using HR.Application.Features.LeaveRequests.ReviewLeaveRequest;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace HR.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/leave-requests")]
     public class LeaveRequestController : ControllerBase
     {
@@ -31,6 +33,7 @@ namespace HR.API.Controllers
             return Ok(result.Data);
         }
 
+        // Any logged-in user can request leave for themselves.
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateLeaveRequestCommand command, CancellationToken ct)
         {
@@ -40,6 +43,8 @@ namespace HR.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
 
+        // Approving/rejecting/cancelling someone else's request is a manager action.
+        [Authorize(Roles = "Admin,HRManager")]
         [HttpPatch("{id}/review")]
         public async Task<IActionResult> Review(Guid id, [FromBody] ReviewLeaveRequestCommand command, CancellationToken ct)
         {

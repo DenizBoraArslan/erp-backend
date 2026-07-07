@@ -1,5 +1,6 @@
 ﻿namespace Sales.Application.Features.Orders.CreateOrder;
 
+using erp.Shared.Contracts;
 using erp.Shared.Events;
 using MassTransit;
 using MediatR;
@@ -12,15 +13,18 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
     private readonly IOrderRepository _orderRepository;
     private readonly ICustomerRepository _customerRepository;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IProductStockProvider _productStockProvider;
 
     public CreateOrderCommandHandler(
         IOrderRepository orderRepository,
         ICustomerRepository customerRepository,
-        IPublishEndpoint publishEndpoint)
+        IPublishEndpoint publishEndpoint,
+        IProductStockProvider productStockProvider)
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
         _publishEndpoint = publishEndpoint;
+        _productStockProvider = productStockProvider;
     }
 
     public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken ct)
@@ -31,6 +35,27 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
 
         if (request.Items == null || request.Items.Count == 0)
             return Result<Guid>.Failure("Order must have at least one item.");
+
+        // Stok kontrolü: sipariş, bir ürünün stoğunu minimum stok seviyesinin
+        // altına düşürecekse (veya zaten yetersizse) reddedilir. Gerçek stok
+        // düşümü sipariş onaylandığında (OrderConfirmedEvent) asenkron olarak
+        // Inventory modülünde yapılıyor ve o consumer yetersiz stokta kalemi
+        // sessizce atlıyor - bu yüzden kullanıcıya anlamlı bir hata
+        // dönebilmek için kontrolü burada, senkron olarak yapıyoruz.
+        foreach (var item in request.Items)
+        {
+            var stockInfo = await _productStockProvider.GetStockInfoAsync(item.ProductId, ct);
+            if (stockInfo is null)
+                return Result<Guid>.Failure($"'{item.ProductName}' ürünü bulunamadı.");
+
+            var remaining = stockInfo.StockQuantity - item.Quantity;
+            if (remaining < stockInfo.MinStockLevel)
+            {
+                return Result<Guid>.Failure(
+                    $"'{item.ProductName}' için stok yetersiz. Mevcut stok: {stockInfo.StockQuantity}, " +
+                    $"istenen: {item.Quantity}, minimum stok seviyesi: {stockInfo.MinStockLevel}.");
+            }
+        }
 
         var order = Order.Create(request.CustomerId, request.Note);
 

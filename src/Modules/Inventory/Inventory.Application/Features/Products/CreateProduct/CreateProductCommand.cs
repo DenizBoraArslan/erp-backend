@@ -13,7 +13,8 @@ namespace Inventory.Application.Features.Products.CreateProduct
        decimal Price,
        Guid CategoryId,
        string? Description = null,
-       int MinStockLevel = 0
+       int MinStockLevel = 0,
+       decimal CostPrice = 0
        ) : IRequest<Result<Guid>>;
 }
 

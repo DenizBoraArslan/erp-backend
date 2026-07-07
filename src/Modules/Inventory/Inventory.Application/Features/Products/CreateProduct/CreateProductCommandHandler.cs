@@ -32,7 +32,8 @@ namespace Inventory.Application.Features.Products.CreateProduct
                 request.Price,
                 request.CategoryId,
                 request.Description,
-                request.MinStockLevel
+                request.MinStockLevel,
+                request.CostPrice
             );
 
             await _productRepository.AddAsync(product, ct);

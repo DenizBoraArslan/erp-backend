@@ -10,7 +10,8 @@ namespace Inventory.Application.DTOs
       Guid Id,
       string Name,
       string? Description,
-      bool IsActive
+      bool IsActive,
+      DateTime CreatedAt
   );
 
 }

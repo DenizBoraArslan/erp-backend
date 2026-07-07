@@ -32,12 +32,14 @@ namespace Finance.Application.Features.Invoices.GetInvoices
                 i.CustomerName,
                 i.OrderId,
                 i.Status.ToString(),
+                i.SubTotal,
+                i.TaxTotal,
                 i.TotalAmount,
                 i.PaidAmount,
                 i.RemainingAmount,
                 i.IssuedAt,
                 i.DueDate,
-                i.Items.Select(x => new InvoiceItemDto(x.Id, x.Description, x.Quantity, x.UnitPrice, x.TotalPrice)).ToList(),
+                i.Items.Select(x => new InvoiceItemDto(x.Id, x.Description, x.Quantity, x.UnitPrice, x.TotalPrice, x.TaxRate, x.TaxAmount, x.GrandTotal)).ToList(),
                 i.Payments.Select(p => new PaymentDto(p.Id, p.Amount, p.Method.ToString(), p.Note, p.PaidAt)).ToList()
             ));
 

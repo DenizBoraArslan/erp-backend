@@ -19,7 +19,17 @@ namespace Inventory.Infrastructure.Persistence.Repositories
         }
 
         public async Task<IEnumerable<StockMovement>> GetByProductIdAsync(Guid productId, CancellationToken ct = default)
-            => await _context.StockMovements.Where(s => s.ProductId == productId).ToListAsync(ct);
+            => await _context.StockMovements
+                .Include(s => s.Product)
+                .Where(s => s.ProductId == productId)
+                .OrderByDescending(s => s.CreatedAt)
+                .ToListAsync(ct);
+
+        public async Task<IEnumerable<StockMovement>> GetAllAsync(CancellationToken ct = default)
+            => await _context.StockMovements
+                .Include(s => s.Product)
+                .OrderByDescending(s => s.CreatedAt)
+                .ToListAsync(ct);
 
         public async Task AddAsync(StockMovement movement, CancellationToken ct = default)
         {

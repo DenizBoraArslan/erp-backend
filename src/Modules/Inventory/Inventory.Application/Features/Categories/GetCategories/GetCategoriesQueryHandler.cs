@@ -23,7 +23,7 @@ namespace Inventory.Application.Features.Categories.GetCategories
         {
             var categories = await _categoryRepository.GetAllAsync(ct);
 
-            var dtos = categories.Select(c => new CategoryDto(c.Id, c.Name, c.Description, c.IsActive));
+            var dtos = categories.Select(c => new CategoryDto(c.Id, c.Name, c.Description, c.IsActive, c.CreatedAt));
 
             return Result<IEnumerable<CategoryDto>>.Success(dtos);
         }

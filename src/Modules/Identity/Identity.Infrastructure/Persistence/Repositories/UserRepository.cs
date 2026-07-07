@@ -27,6 +27,9 @@ namespace Identity.Infrastructure.Persistence.Repositories
         public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default)
             => await _context.Users.AnyAsync(u => u.Email == email.ToLowerInvariant(), ct);
 
+        public async Task<List<User>> GetAllAsync(CancellationToken ct = default)
+            => await _context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).ToListAsync(ct);
+
         public async Task AddAsync(User user, CancellationToken ct = default)
         {
             await _context.Users.AddAsync(user, ct);

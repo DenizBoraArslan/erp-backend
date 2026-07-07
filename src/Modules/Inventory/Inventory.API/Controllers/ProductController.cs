@@ -2,6 +2,7 @@
 using Inventory.Application.Features.Products.CreateProduct;
 using Inventory.Application.Features.Products.GetProducts;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 namespace Inventory.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/products")]
     public class ProductController : ControllerBase
     {
@@ -32,6 +34,7 @@ namespace Inventory.API.Controllers
             return Ok(result.Data);
         }
 
+        [Authorize(Roles = "Admin,InventoryManager")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command, CancellationToken ct)
         {
@@ -41,6 +44,8 @@ namespace Inventory.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
 
+        // Day-to-day stock receiving can be done by staff, not just managers.
+        [Authorize(Roles = "Admin,InventoryManager,InventoryStaff")]
         [HttpPost("{id}/stock/add")]
         public async Task<IActionResult> AddStock(Guid id, [FromBody] AddStockCommand command, CancellationToken ct)
         {

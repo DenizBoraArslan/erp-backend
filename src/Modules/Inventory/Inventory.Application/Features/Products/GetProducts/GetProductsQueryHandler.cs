@@ -26,9 +26,10 @@ namespace Inventory.Application.Features.Products.GetProducts
                 : await _productRepository.GetAllAsync(ct);
 
             var dtos = products.Select(p => new ProductDto(
-                p.Id, p.Name, p.Description, p.SKU, p.Price,
+                p.Id, p.Name, p.Description, p.SKU, p.Price, p.CostPrice,
                 p.StockQuantity, p.MinStockLevel, p.IsLowStock(),
-                p.CategoryId, p.Category?.Name ?? string.Empty, p.IsActive
+                p.CategoryId, p.Category?.Name ?? string.Empty, p.IsActive,
+                p.CreatedAt
             ));
 
             return Result<IEnumerable<ProductDto>>.Success(dtos);

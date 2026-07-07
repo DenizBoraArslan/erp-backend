@@ -12,11 +12,13 @@ namespace Inventory.Application.DTOs
      string? Description,
      string SKU,
      decimal Price,
+     decimal CostPrice,
      int StockQuantity,
      int MinStockLevel,
      bool IsLowStock,
      Guid CategoryId,
      string CategoryName,
-     bool IsActive
+     bool IsActive,
+     DateTime CreatedAt
  );
 }

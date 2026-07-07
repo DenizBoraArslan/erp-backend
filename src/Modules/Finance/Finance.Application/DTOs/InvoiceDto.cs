@@ -13,6 +13,8 @@ namespace Finance.Application.DTOs
       string CustomerName,
       Guid? OrderId,
       string Status,
+      decimal SubTotal,
+      decimal TaxTotal,
       decimal TotalAmount,
       decimal PaidAmount,
       decimal RemainingAmount,
