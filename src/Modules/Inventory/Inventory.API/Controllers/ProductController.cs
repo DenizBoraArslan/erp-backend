@@ -44,7 +44,6 @@ namespace Inventory.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
 
-        // Day-to-day stock receiving can be done by staff, not just managers.
         [Authorize(Roles = "Admin,InventoryManager,InventoryStaff")]
         [HttpPost("{id}/stock/add")]
         public async Task<IActionResult> AddStock(Guid id, [FromBody] AddStockCommand command, CancellationToken ct)

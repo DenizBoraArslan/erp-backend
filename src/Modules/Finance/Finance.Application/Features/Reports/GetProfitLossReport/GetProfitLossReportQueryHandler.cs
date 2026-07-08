@@ -10,13 +10,6 @@ using System.Threading.Tasks;
 
 namespace Finance.Application.Features.Reports.GetProfitLossReport
 {
-    // Kâr/Zarar (P&L): revenue comes from Sales Invoices that have actually
-    // been issued to a customer (Draft invoices aren't real revenue yet,
-    // Cancelled ones never happened); cost comes from Purchase Invoices that
-    // have been confirmed against a supplier, on the same basis. Grouped by
-    // the invoice's IssuedAt month/year, purely additive — no cross-module
-    // joins needed since both repositories already return fully-loaded
-    // aggregates.
     public class GetProfitLossReportQueryHandler : IRequestHandler<GetProfitLossReportQuery, Result<ProfitLossReportDto>>
     {
         private readonly IInvoiceRepository _invoiceRepository;

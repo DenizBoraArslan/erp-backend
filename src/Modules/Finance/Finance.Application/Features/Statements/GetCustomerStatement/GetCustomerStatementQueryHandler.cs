@@ -23,8 +23,6 @@ namespace Finance.Application.Features.Statements.GetCustomerStatement
         {
             var invoices = await _invoiceRepository.GetByCustomerIdAsync(request.CustomerId, ct);
 
-            // Taslak (Draft) faturalar henüz gerçek bir borç değil; iptal
-            // edilenler hiç gerçekleşmedi. İkisi de ekstreye dahil edilmez.
             var relevantInvoices = invoices
                 .Where(i => i.Status != InvoiceStatus.Draft && i.Status != InvoiceStatus.Cancelled)
                 .ToList();

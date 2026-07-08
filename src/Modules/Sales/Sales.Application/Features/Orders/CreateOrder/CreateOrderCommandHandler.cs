@@ -36,12 +36,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
         if (request.Items == null || request.Items.Count == 0)
             return Result<Guid>.Failure("Order must have at least one item.");
 
-        // Stok kontrolü: sipariş, bir ürünün stoğunu minimum stok seviyesinin
-        // altına düşürecekse (veya zaten yetersizse) reddedilir. Gerçek stok
-        // düşümü sipariş onaylandığında (OrderConfirmedEvent) asenkron olarak
-        // Inventory modülünde yapılıyor ve o consumer yetersiz stokta kalemi
-        // sessizce atlıyor - bu yüzden kullanıcıya anlamlı bir hata
-        // dönebilmek için kontrolü burada, senkron olarak yapıyoruz.
+   
         foreach (var item in request.Items)
         {
             var stockInfo = await _productStockProvider.GetStockInfoAsync(item.ProductId, ct);

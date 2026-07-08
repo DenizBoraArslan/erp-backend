@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace Finance.Application.DTOs
 {
-    // Cari Hesap Ekstresi (running account statement) — a single chronological
-    // line, either a debit (an invoice raising what's owed) or a credit (a
-    // payment reducing it), with the running balance after that line.
+
     public record StatementEntryDto(
         DateTime Date,
-        string Type,        // "Invoice" | "Payment"
+        string Type,        
         string Description,
         decimal Debit,
         decimal Credit,

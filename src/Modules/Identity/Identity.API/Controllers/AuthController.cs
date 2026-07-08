@@ -24,21 +24,12 @@ namespace Identity.API.Controllers
         {
             _mediator = mediator;
         }
-
-        // The JWT's "sub" claim is the current user's id (see TokenService).
-        // ASP.NET Core's default inbound claim mapping renames it to
-        // ClaimTypes.NameIdentifier, but we fall back to the raw "sub" name
-        // just in case that mapping is ever disabled.
         private Guid CurrentUserId()
         {
             var raw = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
             return Guid.Parse(raw!);
         }
-
-        // Public self-registration has been removed. Creating a user is now
-        // an admin-only action (used by the "Kullanıcı Yönetimi" screen on
-        // web/mobile to create accounts with a specific role).
         [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken ct)
@@ -61,8 +52,6 @@ namespace Identity.API.Controllers
 
             return Ok(result.Data);
         }
-
-        // Admin-only user list for the "Kullanıcı Yönetimi" screen.
         [Authorize(Roles = "Admin")]
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers(CancellationToken ct)
@@ -111,8 +100,6 @@ namespace Identity.API.Controllers
 
             return Ok();
         }
-
-        // Admin force-resets someone else's password (e.g. they're locked out).
         [Authorize(Roles = "Admin")]
         [HttpPatch("users/{id}/reset-password")]
         public async Task<IActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordRequest request, CancellationToken ct)
@@ -124,8 +111,6 @@ namespace Identity.API.Controllers
 
             return Ok();
         }
-
-        // Self-service: any logged-in user (any role) changes their own password.
         [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken ct)

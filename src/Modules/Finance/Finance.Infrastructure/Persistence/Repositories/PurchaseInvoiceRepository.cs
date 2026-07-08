@@ -9,11 +9,7 @@ using System.Threading.Tasks;
 
 namespace Finance.Infrastructure.Persistence.Repositories
 {
-    // Mirrors InvoiceRepository's item/payment reconciliation pattern exactly
-    // (see that class for the full rationale) — PurchaseInvoiceItems must be
-    // detached-then-bulk-deleted-then-re-added rather than relying on EF
-    // Core's change tracker for the private-backing-field collection nav,
-    // otherwise UpdateDetails() produces a DbUpdateConcurrencyException.
+ 
     public class PurchaseInvoiceRepository : IPurchaseInvoiceRepository
     {
         private readonly FinanceDbContext _context;
@@ -80,11 +76,6 @@ namespace Finance.Infrastructure.Persistence.Repositories
                         .ExecuteDeleteAsync(ct);
                 }
 
-                // Only genuinely new items (not already present in the DB) need
-                // inserting. Status-only transitions like Confirm don't touch the
-                // item list at all, so their items' Ids already exist in the DB -
-                // forcing EntityState.Added on them would attempt to INSERT rows
-                // that already exist, causing a primary-key violation.
                 foreach (var item in newItems)
                 {
                     if (!existingIdSet.Contains(item.Id))

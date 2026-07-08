@@ -12,8 +12,6 @@ namespace Finance.Application
             services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(GetInvoicesQueryHandler).Assembly));
 
-            // Cross-module read port: lets Sales check whether an order's
-            // auto-generated invoice has been paid before allowing delivery.
             services.AddScoped<IOrderInvoiceStatusProvider, OrderInvoiceStatusProvider>();
 
             return services;

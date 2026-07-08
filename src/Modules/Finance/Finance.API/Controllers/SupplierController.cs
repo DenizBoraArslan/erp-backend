@@ -54,7 +54,6 @@ namespace Finance.API.Controllers
             return Ok();
         }
 
-        // Deactivating/reactivating a supplier is a manager-level action.
         [Authorize(Roles = "Admin,FinanceManager")]
         [HttpPatch("{id}/deactivate")]
         public async Task<IActionResult> Deactivate(Guid id, CancellationToken ct)

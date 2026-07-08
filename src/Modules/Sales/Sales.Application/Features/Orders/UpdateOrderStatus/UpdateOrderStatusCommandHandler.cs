@@ -39,10 +39,7 @@ namespace Sales.Application.Features.Orders.UpdateOrderStatus
 
             var action = request.Action.ToLower();
 
-            // Fatura ödenmeden sipariş teslim edilemez: Finance modülü her
-            // sipariş oluşturulduğunda otomatik bir Taslak fatura açıyor
-            // (bkz. OrderCreatedConsumer), bu yüzden burada o faturanın
-            // ödenip ödenmediğini kontrol edip teslim işlemini engelliyoruz.
+    
             if (action == "deliver")
             {
                 var paymentStatus = await _orderInvoiceStatusProvider.GetPaymentStatusAsync(order.Id, ct);
@@ -52,9 +49,6 @@ namespace Sales.Application.Features.Orders.UpdateOrderStatus
                 }
             }
 
-            // Stok yeniden kontrolü: sipariş oluşturulduktan sonra başka
-            // siparişler stoğu düşürmüş olabilir, bu yüzden gerçek düşümü
-            // tetikleyen onay (confirm) anında stok tekrar doğrulanır.
             if (action == "confirm")
             {
                 foreach (var item in order.OrderItems)
@@ -91,8 +85,6 @@ namespace Sales.Application.Features.Orders.UpdateOrderStatus
 
             await _orderRepository.UpdateAsync(order, ct);
 
-            // Sipariş onaylandığında ilgili ürünlerin stoğunu düşmek ve bu
-            // hareketi izlenebilir kılmak için Inventory modülüne bildir.
             if (action == "confirm")
             {
                 await _publishEndpoint.Publish(new OrderConfirmedEvent

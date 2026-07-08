@@ -55,7 +55,6 @@ namespace Finance.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
 
-        // Issuing a Draft invoice (locking it in) is a manager action.
         [Authorize(Roles = "Admin,FinanceManager")]
         [HttpPatch("{id}/issue")]
         public async Task<IActionResult> Issue(Guid id, CancellationToken ct)

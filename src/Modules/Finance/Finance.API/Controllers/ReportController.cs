@@ -19,9 +19,6 @@ namespace Finance.API.Controllers
             _mediator = mediator;
         }
 
-        // Profit margins are more sensitive than a plain invoice list, so
-        // this is locked to Finance roles + Admin only (unlike GetAll on
-        // Invoice/PurchaseInvoice, which any authenticated role can call).
         [Authorize(Roles = "Admin,FinanceManager,FinanceSpecialist")]
         [HttpGet("profit-loss")]
         public async Task<IActionResult> GetProfitLoss(CancellationToken ct)

@@ -1,13 +1,6 @@
 ﻿namespace Identity.Domain.Enums
 {
-    /// <summary>
-    /// Kept "User" and "Manager" for backward compatibility with any
-    /// already-registered accounts (role is stored as a string column, so
-    /// existing rows still deserialize fine). Going forward, every new
-    /// account should get one of the module-scoped roles below instead —
-    /// each module has a "Manager" (full control within that module) and a
-    /// narrower operational role that can't approve/delete/manage others.
-    /// </summary>
+
     public enum UserRole
     {
         User = 0,

@@ -38,9 +38,6 @@ namespace Finance.Application.Features.PurchaseInvoices.ConfirmPurchaseInvoice
 
             await _purchaseInvoiceRepository.UpdateAsync(invoice, ct);
 
-            // Ürüne bağlı (ProductId dolu) kalemler için Inventory modülüne
-            // stok artışı bildir; nakliye/hizmet gibi stok dışı kalemler
-            // (ProductId null) atlanır.
             var stockItems = invoice.Items.Where(i => i.ProductId.HasValue).ToList();
             if (stockItems.Any())
             {

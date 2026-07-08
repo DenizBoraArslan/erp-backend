@@ -4,12 +4,7 @@ using Finance.Domain.Interfaces;
 
 namespace Finance.Application.Services
 {
-    /// <summary>
-    /// Finance-side implementation of the shared cross-module read port. Every
-    /// order gets a Draft invoice automatically the moment it's created (see
-    /// OrderCreatedConsumer), so looking the invoice up by OrderId and mapping
-    /// its status is enough to answer "has this order's invoice been paid?".
-    /// </summary>
+
     public class OrderInvoiceStatusProvider : IOrderInvoiceStatusProvider
     {
         private readonly IInvoiceRepository _invoiceRepository;

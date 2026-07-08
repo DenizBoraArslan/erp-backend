@@ -33,7 +33,6 @@ namespace HR.API.Controllers
             return Ok(result.Data);
         }
 
-        // Any logged-in user can request leave for themselves.
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateLeaveRequestCommand command, CancellationToken ct)
         {
@@ -43,7 +42,6 @@ namespace HR.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = result.Data });
         }
 
-        // Approving/rejecting/cancelling someone else's request is a manager action.
         [Authorize(Roles = "Admin,HRManager")]
         [HttpPatch("{id}/review")]
         public async Task<IActionResult> Review(Guid id, [FromBody] ReviewLeaveRequestCommand command, CancellationToken ct)
